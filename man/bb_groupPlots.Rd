@@ -7,7 +7,7 @@
 bb_groupPlots(plots)
 }
 \arguments{
-\item{plots}{a list of plot objects returned from BentoBox functions}
+\item{plots}{a list of plot objects returned from BentoBox functions and/or other "bb_group" objects}
 }
 \value{
 Function will return a "bb_group" object
