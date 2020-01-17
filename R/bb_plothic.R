@@ -414,6 +414,7 @@ bb_plotHic <- function(hic, chrom = 8, chromstart = 133600000, chromend = 134800
                              additional_parameters = list(half = half,
                                                           resolution = resolution, althalf = althalf,
                                                           norm = norm)), class = "bb_hic")
+  attr(x = hic_plot, which = "plotted") <- draw
 
   # ======================================================================================================================================================================================
   # CATCH ERRORS
@@ -482,9 +483,9 @@ bb_plotHic <- function(hic, chrom = 8, chromstart = 133600000, chromend = 134800
   currentViewports <- current_viewports()
   vp_name <- paste0("bb_hic", length(grep(pattern = "bb_hic", x = currentViewports)) + 1)
 
-  ## If placing information is provided but plot == TRUE, set up it's own viewport separate from bb_makepage
+  ## If full placing information isn't provided but plot == TRUE, set up it's own viewport separate from bb_makepage
   ## Not translating into page_coordinates
-  if (is.null(x) & is.null(y)){
+  if (is.null(x) | is.null(y) | is.null(width) | is.null(height)){
 
     vp <- viewport(height = unit(1, "snpc"), width = unit(1, "snpc"),
                    x = unit(0.5, "npc"), y = unit(0.5, "npc"),
