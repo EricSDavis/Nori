@@ -12,6 +12,38 @@ bb_groupPlots <- function(plots){
   # FUNCTIONS
   # ======================================================================================================================================================================================
 
+  group_children <- function(group){
+
+    children <- childNames(group)
+
+    return(children)
+
+  }
+
+
+  check_grouping <- function(plot, current_groups){
+
+
+    group_children <- unlist(lapply(current_groups, group_children))
+
+    gtree_name <- plot$grobs$name
+    if (gtree_name %in% group_children){
+
+      stop(paste0(class(plot), " plot already found in another group.  Make copy of plot to add to new group, or add entire group to new group."))
+
+    }
+
+  }
+
+  errorcheck_bb_groupPlots <- function(plots){
+
+    ## Check that the plots aren't already in another group
+    lapply(plots, check_grouping, current_groups = get("group_gtrees", envir = bbEnv))
+    #assign("CURRENT_GROUPS", get("group_gtrees", envir = bbEnv), envir = globalenv())
+
+
+  }
+
   ## Define a function that determines whether a plot in the input list is a group or not
   get_group <- function(plot){
 
@@ -98,6 +130,10 @@ bb_groupPlots <- function(plots){
     assign("gtree_container", addGrob(gTree = get("gtree_container", envir = bbEnv), child = gtree), envir = bbEnv)
 
   }
+  # ======================================================================================================================================================================================
+  # CATCH ERRORS
+  # ======================================================================================================================================================================================
+  errorcheck_bb_groupPlots(plots = plots)
 
   # ======================================================================================================================================================================================
   # UNGROUP ANY BB_GROUPS
@@ -197,6 +233,14 @@ bb_groupPlots <- function(plots){
   # ======================================================================================================================================================================================
 
   plot_group$grobs <- get("gtree_container", envir = bbEnv)
+  gtree_name <- paste0(plot_group$grobs$name, ".group")
+  plot_group$grobs$name <- gtree_name
+
+  groups <- get("group_gtrees", envir = bbEnv)
+
+  groups <- append(groups, list(plot_group$grobs))
+
+  assign("group_gtrees", groups, envir = bbEnv)
 
   # ======================================================================================================================================================================================
   # REMOVE OLD PLOTS AND THEIR VIEWPORTS

@@ -107,7 +107,7 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
       rect1 <- rectGrob(x = center_x, y = center_y, width = side, height = side, default.units = "native",
                         gp = gpar(lty = object$gpar$lty, lwd = object$gpar$lwd, col = object$gpar$col, fill = NA))
 
-      grid.draw(rect1)
+      #grid.draw(rect1)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = rect1), envir = bbEnv)
 
     } else if (hic$additional_parameters$half == "top"){
@@ -117,7 +117,7 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
       rect1 <- rectGrob(x = center_x, y = center_y, width = side, height = side, default.units = "native",
                         gp = gpar(lty = object$gpar$lty, lwd = object$gpar$lwd, col = object$gpar$col, fill = NA))
 
-      grid.draw(rect1)
+      #grid.draw(rect1)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = rect1), envir = bbEnv)
 
     } else if (hic$additional_parameters$half == "both"){
@@ -135,8 +135,8 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
       rect2 <- rectGrob(x = center_x2, y = center_y2, width = side, height = side, default.units = "native",
                         gp = gpar(lty = object$gpar$lty, lwd = object$gpar$lwd, col = object$gpar$col, fill = NA))
 
-      grid.draw(rect1)
-      grid.draw(rect2)
+      #grid.draw(rect1)
+      #grid.draw(rect2)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = rect1), envir = bbEnv)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = rect2), envir = bbEnv)
 
@@ -156,7 +156,7 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
       circ1 <- circleGrob(x = center_x, y = center_y, r = radius, default.units = "native",
                           gp = gpar(lty = object$gpar$lty, lwd = object$gpar$lwd, col = object$gpar$col, fill = NA))
 
-      grid.draw(circ1)
+      #grid.draw(circ1)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = circ1), envir = bbEnv)
 
     } else if (hic$additional_parameters$half == "top"){
@@ -166,7 +166,7 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
       circ1 <- circleGrob(x = center_x, y = center_y, r = radius, default.units = "native",
                           gp = gpar(lty = object$gpar$lty, lwd = object$gpar$lwd, col = object$gpar$col, fill = NA))
 
-      grid.draw(circ1)
+      #grid.draw(circ1)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = circ1), envir = bbEnv)
 
     } else if (hic$additional_parameters$half == "both"){
@@ -184,8 +184,8 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
       circ2 <- circleGrob(x = center_x2, y = center_y2, r = radius, default.units = "native",
                           gp = gpar(lty = object$gpar$lty, lwd = object$gpar$lwd, col = object$gpar$col, fill = NA))
 
-      grid.draw(circ1)
-      grid.draw(circ2)
+      #grid.draw(circ1)
+      #grid.draw(circ2)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = circ1), envir = bbEnv)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = circ2), envir = bbEnv)
 
@@ -205,7 +205,7 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
                    arrow = arrow(length = unit(0.1, "inches"), ends = "first", type = "closed"), default.units = "native",
                    gp = gpar(lty = object$gpar$lty, lwd = object$gpar$lwd, fill = object$gpar$col))
 
-     grid.draw(arrow1)
+     #grid.draw(arrow1)
      assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = arrow1), envir = bbEnv)
 
     } else if (hic$additional_paramters$half == "top"){
@@ -217,7 +217,7 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
                     arrow = arrow(length = unit(0.1, "inches"), ends = "first", type = "closed"), default.units = "native",
                     gp = gpar(lty = object$gpar$lty, lwd = object$gpar$lwd, fill = object$gpar$col))
 
-      grid.draw(arrow1)
+      #grid.draw(arrow1)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = arrow1), envir = bbEnv)
 
     } else if (hic$additional_parameters$half == "both"){
@@ -237,8 +237,8 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
                     arrow = arrow(length = unit(0.1, "inches"), ends = "first", type = "closed"), default.units = "native",
                     gp = gpar(lty = object$gpar$lty, lwd = object$gpar$lwd, fill = object$gpar$col))
 
-      grid.draw(arrow1)
-      grid.draw(arrow2)
+      #grid.draw(arrow1)
+      #grid.draw(arrow2)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = arrow1), envir = bbEnv)
       assign("annotation_grobs", addGrob(gTree = get("annotation_grobs", envir = bbEnv), child = arrow2), envir = bbEnv)
 
@@ -322,11 +322,15 @@ bb_annotateLoops <- function(hic, loops, shift = 4, type = "box", lty = "dashed"
   ## Go back to root viewport
   upViewport()
 
+  seekViewport(name = vp$name)
+  popViewport()
   # ======================================================================================================================================================================================
   # ADD GROBS TO OBJECT
   # ======================================================================================================================================================================================
 
   loop_annot$grobs <- get("annotation_grobs", envir = bbEnv)
+
+  grid.draw(loop_annot$grobs)
   # ======================================================================================================================================================================================
   # RETURN OBJECT
   # ======================================================================================================================================================================================
