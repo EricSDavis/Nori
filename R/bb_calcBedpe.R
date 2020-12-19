@@ -1,5 +1,5 @@
 ## Define function to make BEDPE from BED ##
-makeBedpe <- function(bed, res = 10000, x = 100, decreasing = T,
+bb_calcBedpe <- function(bed, res = 10000, x = 100, decreasing = T,
                       interactions = "interchromosomal") {
 
   ## Format bed if it is a granges object

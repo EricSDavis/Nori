@@ -1,8 +1,12 @@
 ## Define function to filter out interactions that are too close to the diagonal
-filterIntraBedpe <- function(bedpe, res, buffer) {
+bb_filterBedpe <- function(bedpe, res, buffer) {
+
+  ## TODO Generalize this function for inter & intra pairs
 
   ## Only valid for intrachromosomal bedpe files
-  stopifnot(bedpe[[1]] == bedpe[[4]])
+  if(bedpe[[1]] != bedpe[[4]]) {
+    stop("bb_filterBedpe is only valid for intrachromosomal pairs")
+  }
 
   ## Distance from diagonal to center bedpe pixel
   d <- (sqrt((abs(bedpe[[5]] - bedpe[[2]])^2 * 2)) / 2)

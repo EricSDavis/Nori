@@ -1,5 +1,5 @@
 ## Define function to extract APA matricies at each bedpe position
-computeApa <- function(bedpe, hicFile, norm = "NONE", res = 10000, buffer = 5, equalLengthOut = T) {
+bb_calcApa <- function(bedpe, hicFile, norm = "NONE", res = 10000, buffer = 5, equalLengthOut = T) {
 
   ## Put data in correct order for straw extraction
   if (all(bedpe[[1]] == bedpe[[4]])) {

@@ -8,11 +8,11 @@ BentoBox gives users the ability to create and precisely control genomic plots i
 
 APA (Aggregate Peak Analysis) Tools:
 
-  1. `makeBedpe()`: Computes all potential paired interactions from a BED file.
+  1. `bb_calcBedpe()`: Calculates all potential paired interactions from a BED file.
   
-  2. `filterInterBedpe()`: Filters out interchromosomal interactions that would result in an APA plot that intersects the diagonal.
+  2. `bb_filterBedpe()`: Filters out interchromosomal interactions that would result in an APA plot that intersects the diagonal.
   
-  3. `computeApa()`: Efficiently extracts BEDPE interactions from a `.hic` matrix.
+  3. `bb_calcApa()`: Efficiently extracts BEDPE interactions from a `.hic` matrix.
   
   4. `bb_plotApa()`: BentoBox-compatible APA plotting function.
   
