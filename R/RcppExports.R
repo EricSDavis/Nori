@@ -2,6 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 checkRow <- function(x, maxRows, rowCol, wiggle) {
-    .Call('_BentoBox_checkRow', PACKAGE = 'BentoBox', x, maxRows, rowCol, wiggle)
+    .Call('_Nori_checkRow', PACKAGE = 'Nori', x, maxRows, rowCol, wiggle)
 }
 
