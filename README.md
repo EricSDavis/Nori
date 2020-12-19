@@ -10,9 +10,11 @@ APA (Aggregate Peak Analysis) Tools:
 
   1. `makeBedpe()`: Computes all potential paired interactions from a BED file.
   
-  2. `computeApa()`: Efficiently extracts BEDPE interactions from a `.hic` matrix.
+  2. `filterInterBedpe()`: Filters out interchromosomal interactions that would result in an APA plot that intersects the diagonal.
   
-  3. `bb_plotApa()`: BentoBox-compatible APA plotting function.
+  3. `computeApa()`: Efficiently extracts BEDPE interactions from a `.hic` matrix.
+  
+  4. `bb_plotApa()`: BentoBox-compatible APA plotting function.
   
 Wrapper Functions (coming soon):
 
