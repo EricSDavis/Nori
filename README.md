@@ -42,7 +42,7 @@ Wrapper Functions (coming soon):
 To install Nori, use the following code:
 
 ```{r}
-remotes::install_github(repo = "EricSDavis/Nori", force = T)
+remotes::install_github(repo = "EricSDavis/Nori", ref = "Fork-Nori", force = T)
 ```
 
 ## Usage
