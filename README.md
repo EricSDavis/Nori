@@ -1,28 +1,48 @@
-# BentoBox
+# Nori: Wrappers and add-ons for BentoBox functions
 
 ## Overview
 
-Rapid and precise coordinate-based visualization of genomic data
+BentoBox gives users the ability to create and precisely control genomic plots in R. Nori extends BentoBox with useful wrappers and additional functionality.
+
+## Additional Features
+
+APA (Aggregate Peak Analysis) Tools:
+
+  1. `makeBedpe()`: Computes all potential paired interactions from a BED file.
+  
+  2. `computeApa()`: Efficiently extracts BEDPE interactions from a `.hic` matrix.
+  
+  3. `bb_plotApa()`: BentoBox-compatible APA plotting function.
+  
+Wrapper Functions (coming soon):
+
+  1. `bb_plotMulti()`: Convenience wrapper function for plotting multiple bb_plots.
+  
+  3. `bb_pageLayout()`: Create a complex, reusable layouts for placing plots.
 
 ## Dependencies
 
-Currently `rtracklayer` needs to be installed manually. To install
+1. Currently `rtracklayer` needs to be installed manually. To install
 
-```
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+  ```
+  if (!requireNamespace("BiocManager", quietly = TRUE))
+      install.packages("BiocManager")
+  
+  BiocManager::install("rtracklayer")
+  ```
 
-BiocManager::install("rtracklayer")
-```
+2. Package BentoBox:
+
+  ```
+  remotes::install_github("PhanstielLab/BentoBox", force = T)
+  ```
 
 ## Installation
 
-To install BentoBox, use the following code:
+To install Nori, use the following code:
 
 ```{r}
-install.packages("devtools")
-library(devtools)
-install_github("PhanstielLab/BentoBox")
+remotes::install_github(repo = "EricSDavis/Nori", force = T)
 ```
 
 ## Usage
@@ -33,6 +53,7 @@ Coming Soon
 
 * [Nicole Kramer](https://github.com/nekramer)
 * [Eric Davis](https://github.com/EricSDavis)
+* [Sarah Parker](https://github.com/sarmapar)
 * [Doug Phanstiel](https://github.com/dphansti)
 
 ## License

@@ -1,8 +1,8 @@
-Package: BentoBox
-Title: Genome plotting with grid Graphics
+Package: Nori
+Title: Wrappers and add-ons for BentoBox functions
 Version: 0.1.0
-Authors@R: person("Nicole", "Kramer", email = "nekramer@live.unc.edu", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Authors@R: person("Eric", "Davis", email = "esdavis@live.unc.edu", role = c("aut", "cre"))
+Description: BentoBox gives users the ability to create and precisely control genomic plots in R. Nori extends BentoBox with useful wrappers and additional functionality.
 Depends: R (>= 3.5.0), tools, grid, data.table, tidyr, dplyr, ggplotify, Rmpfr, purrr
 License: What license is it under?
 Encoding: UTF-8
