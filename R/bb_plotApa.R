@@ -17,7 +17,7 @@
 #'
 #' @return Function will draw a APA matrix and return an object of class "bb_apa"
 #'
-#' @example
+#' @examples
 #'
 #' ## Create divergent matrix ####
 #' m <- matrix(data = rnorm(n = 21*21, mean = 0, sd = 2), nrow = 21, ncol = 21)
