@@ -18,7 +18,7 @@ bb_filterBedpe <- function(bedpe, res, buffer) {
   ## TODO Generalize this function for inter & intra pairs
 
   ## Only valid for intrachromosomal bedpe files
-  if(bedpe[[1]] != bedpe[[4]]) {
+  if(all(bedpe[[1]] != bedpe[[4]])) {
     stop("bb_filterBedpe is only valid for intrachromosomal pairs")
   }
 
