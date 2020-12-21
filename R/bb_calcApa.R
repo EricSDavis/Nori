@@ -1,3 +1,19 @@
+#' Extract BEDPE interactions from a Hi-C matrix
+#'
+#' @param bedpe data.frame or data.table in BEDPE format.
+#' @param hicFile string path to .hic file.
+#' @param norm string hic normalization <NONE/VC/VC_SQRT/KR>.
+#' @param res integer resolution of bedpe bins.
+#' @param buffer integer number of res-length bins from the center pixel.
+#' @param equalLengthOut logical can be set to false to get an APA list that is not the
+#'   same length as the number of rows of the input bedpe file. Adds a slight efficieny
+#'   boost.
+#'
+#' @return Returns a list APA matricies that can be compiled and plotted.
+#'
+#' @export
+#'
+#'
 ## Define function to extract APA matricies at each bedpe position
 bb_calcApa <- function(bedpe, hicFile, norm = "NONE", res = 10000, buffer = 5, equalLengthOut = T) {
 

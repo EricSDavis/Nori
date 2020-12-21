@@ -1,3 +1,17 @@
+#' Filters out short BEDPE interactions
+#'
+#' Interactions from a BEDPE file that would result in APA plots intersecting the diagonal
+#' (given a resolution and buffer size) are removed from the BEDPE file.
+#'
+#' @param bedpe data.frame or data.table in BEDPE format
+#' @param res integer resolution of bedpe bins
+#' @param buffer integer number of res-length bins from the center pixel
+#'
+#' @return Returns a filtered BEDPE
+#'
+#' @export
+#'
+#'
 ## Define function to filter out interactions that are too close to the diagonal
 bb_filterBedpe <- function(bedpe, res, buffer) {
 
