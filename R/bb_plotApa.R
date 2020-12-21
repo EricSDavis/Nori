@@ -1,185 +1,216 @@
-## Newest version of plotApa
+#' Plots Aggregate Peak Analysis Matrix
+#'
+#' @param params optional "bb_params" object containing relevant function parameters
+#' @param apa matrix, list of matricies, or 3 column data.frame of APA results
+#' @param x numeric or unit object specifying x-location of plot
+#' @param y numeric or unit object specifying y-location of plot
+#' @param width numeric or unit object specifying width of plot
+#' @param height numeric or unit object specifying height of plot
+#' @param just string or numeric vector specifying the justification of the viewport
+#'  relative to its (x, y) location
+#' @param default.units string indicating the default units to use if x, y, width, or
+#'  height are only given as numeric vectors
+#' @param draw logical value indicating whether graphics output should be produced
+#' @param palette colorRampPalette function to use to map values to colors
+#' @param n numeric by which to divide aggregate matrix
+#' @param zrange vector of length 2; max and min values to set color scale
+#'
+#' @return Function will draw a APA matrix and return an object of class "bb_apa"
+#'
+#' @example
+#'
+#' ## Create divergent matrix ####
+#' m <- matrix(data = rnorm(n = 21*21, mean = 0, sd = 2), nrow = 21, ncol = 21)
+#'
+#' ## Define parameters
+#' p <- bb_params(width = 3, height = 3, default.units = "inches")
+#'
+#' ## Create page
+#' bb_pageCreate(params = p)
+#'
+#' ## Plot apa
+#' plot <- bb_plotApa(apa = m,
+#'                    x = p$width/2, y = p$height/2,
+#'                    width = p$width*0.5, height = p$width*0.5, just = c("center", "center"),
+#'                    palette = colorRampPalette(c("blue", "white", "red")), zrange = NULL)
+#'
+#' ## Annotate legend
+#' bb_annoHeatmapLegend(plot = plot,
+#'                      x = 2.3, y = 0.75, width = 0.1, height = 0.75)
+#'
+#'
+#' ## Create sequential matrix
+#' m <- matrix(data = sample(0:100, 21*21, replace = T), nrow = 21, ncol = 21)
+#'
+#' ## Define parameters
+#' p <- bb_params(width = 3, height = 3, default.units = "inches")
+#'
+#' ## Create page
+#' bb_pageCreate(params = p)
+#'
+#' ## Plot apa
+#' plot <- bb_plotApa(apa = m,
+#'                    x = p$width/2, y = p$height/2,
+#'                    width = p$width*0.5, height = p$width*0.5, just = c("center", "center"),
+#'                    palette = colorRampPalette(c("white", "dark red")), zrange = NULL)
+#'
+#' ## Annotate legend
+#' bb_annoHeatmapLegend(plot = plot,
+#'                      x = 2.3, y = 0.75, width = 0.1, height = 0.75)
+#'
+#'
+#' @export
+## Define function to plot APA
+bb_plotApa <- function(params = NULL, apa,
+                       x = NULL, y = NULL, width = NULL, height = NULL,
+                       just = c("left", "top"), default.units = "inches", draw = TRUE,
+                       palette = colorRampPalette(c("white", "dark red")),
+                       n = NULL, zrange=NULL) {
+
+  ## Parse parameters & Create Object-----------------------------------------------------
+
+  ## Get parsed arguments
+  parsedArgs <- parseParams2(
+    params = params,
+    defaultArgs = formals(eval(match.call()[[1]])),
+    declaredArgs = lapply(match.call()[-1], eval)
+  )
+
+  ## Initialize object
+  apa_plot <- structure(
+    .Data = c(parsedArgs,
+      list(
+        color_palette = parsedArgs$palette,
+        grobs = NULL
+      )
+    ),
+    class = "bb_apa"
+  )
+
+  ## Set attributes for object
+  attr(x = apa_plot, which = "plotted") <- parsedArgs$draw
+
+  ## Parse units
+  apa_plot <- defaultUnits(object = apa_plot, default.units = parsedArgs$default.units)
 
 
-## Load APA data
-# load("data/output/inter_intrachromAPA_10kb_500peaks_10buffer_noNorm.rda")
+  ## Read in data & check for formatting errors ------------------------------------------
 
-## Required libraries (add to imports)
-library(colourvalues)
+  ## Accept multiple types of input and convert to matrix
+  if (class(apa_plot$apa) == "list") {
 
+    ## Check for errors with list format
+    check_apa_list(apa_plot$apa)
 
-## Input variables -----------------------------------------------------------------------
-apa = inter_wt
-# apa = Reduce("+", inter_wt)
-# apa = reshape2::melt(apa)
-
-palette = colorRampPalette(c("white", "dark red"))
-range = c(0, 1252)#c(639, 1252)
+    ## Convert apa matrix list to a single apa matrix
+    apa_plot$apa <- Reduce("+", apa_plot$apa)
 
 
-## Tests ---------------------------------------------------------------------------------
+  } else if ("data.frame" %in% class(apa_plot$apa)) {
 
-# ## Different classes 1
-# apa = inter_wt
-# class(apa[[1]]) <- "data.frame"
-#
-# ## Different classes 2
-# apa = inter_wt
-# apa[[1]] <- as.data.frame(apa[[1]])
-#
-# ## Same dimesion 1
-# apa = inter_wt
-# apa <- apa[1:10]
-# apa[[1]] <- apa[[1]][-c(1:2),]
-#
-# ## Same dimesion 2
-# apa = inter_wt
-# apa <- apa[1:10]
-# apa <- lapply(1:length(apa), function(i) apa[[i]] <- apa[[i]][-c(1:2),])
-#
-# ## All numeric 1
-# apa <- list(
-#   matrix(data = "a", nrow = 21, ncol = 21),
-#   matrix(data = "b", nrow = 21, ncol = 21)
-# )
-#
-# ## All numeric 2
-# apa <- matrix(data = "a", nrow = 21, ncol = 21)
-#
-# ## Long format 1
-# apa = Reduce("+", inter_wt)
-# apa = reshape2::melt(apa)
-# apa$something <- "a"
-#
-# ## long format 2
-# apa = Reduce("+", inter_wt)
-# apa = reshape2::melt(apa)
-# apa$value <- as.character(apa$value)
+    ## Check for errors with data.frame format
+    check_apa_dataFrame(apa_plot$apa)
 
-## Unsupported class
+    ## Rename columns & cast into wide format matrix
+    colnames(apa_plot$apa) <- c("var1", "var2", "value")
+    apa_plot$apa <- reshape2::acast(apa_plot$apa, var1 ~ var2)
 
-## Define functions ----------------------------------------------------------------------
+  } else if (is.null(apa_plot$apa)) {
 
-## Define function that checks apa for list format
-check_apa_list <- function(apa) {
+    ## More specific error message if apa is null
+    stop("argument 'apa' is missing, with no default.")
 
-  ## Check that the class of each element is a matrix
-  if (!identical(unique(unlist(lapply(apa, class))), "matrix")) {
-    stop("apa list must all be class 'matrix'.")
+  } else if (class(apa_plot$apa) != "matrix") {
+
+    ## Stop for anything that is not a matrix
+    stop(sprintf("class %s is not supported.", class(apa_plot$apa)))
+
   }
 
-  ## Check that all elements are of the same, square dimensions
-  if (length(unique(unlist(lapply(apa, dim)))) != 1) {
-    stop("apa list must contain matricies of the same dimensions and nrow == ncol.")
+  ## Check for matrix errors
+  check_apa_matrix(apa_plot$apa)
+
+
+  ## APA plot specific processing --------------------------------------------------------
+
+  # Divide values by n
+  if (!is.null(apa_plot$n)) {
+    apa_plot$apa <- apa_plot$apa / n
   }
 
-  ## Check that all elements are numeric
-  if (!identical(class(unlist(apa)), "numeric")) {
-    stop("apa list must be a list of numeric matricies.")
-  }
+  ## Check for zrange errors
+  check_apa_zrange(apa_plot$zrange)
 
-}
+  ## Set zrange if it is null
+  apa_plot <- set_zrange(apa_plot)
 
-## Define function that checks apa for data.frame format
-check_apa_dataFrame <- function(apa) {
+  ## Map values to colors
+  colv <- bb_maptocolors(vec = as.vector(apa_plot$apa),
+                         col = apa_plot$palette,
+                         num = 1000, range = apa_plot$zrange)
 
-  ## Check that format is long (expects 3 column data.frame)
-  if (ncol(apa) != 3) {
-    stop("apa data.frame expects long format (i.e. bin1, bin2, value)")
-  }
+  ## Format color vector back to apa matrix
+  m <- matrix(data = colv, nrow = nrow(apa_plot$apa), ncol = ncol(apa_plot$apa))
 
-  ## Check that third column is numeric
-  if (!identical(class(apa[[3]]), "numeric")) {
-    stop("apa data.frame values must be numeric.")
-  }
+  ## Viewports ---------------------------------------------------------------------------
 
-}
+  ## Get viewport name
+  currentViewports <- current_viewports()
+  vp_name <- paste0("bb_apa", length(grep(pattern = "bb_apa", x = currentViewports)) + 1)
 
-## Define function that checks apa for matrix format
-check_apa_matrix <- function(apa) {
 
-  ## Check that format is wide
-  if (nrow(apa) != ncol(apa)) {
-    stop("apa matrix must have equal numbers of rows and columns (i.e. wide format).")
-  }
+  ## If placing information is provided but plot == TRUE,
+  ## set up it's own viewport separate from bb_makepage
 
-  ## Check that all elements are numeric
-  if (!identical(class(as.vector(apa)), "numeric")) {
-    stop("apa matrix must be a numeric.")
-  }
+  ## Not translating into page_coordinates
+  if (is.null(apa_plot$x) & is.null(apa_plot$y)){
 
-}
+    vp <- viewport(x = unit(0.5, "npc"), y = unit(0.5, "npc"),
+                   height = unit(1, "snpc"), width = unit(1, "snpc"),
+                   clip = "on", just = "center", name = vp_name)
 
-## Define color mapping function (from package:BentoBox)
-maptocolors <- function(vec, col, num = 100, range = NULL){
+    if (apa_plot$draw == TRUE){
 
-  if (is.null(range) == TRUE){
-    breaks <- seq(min(vec), max(vec), length.out = num)
+      vp$name <- "bb_hic1"
+      grid.newpage()
+
+    }
+
   } else {
-    vec[which(vec < range[1])] = range[1]
-    vec[which(vec > range[2])] = range[2]
-    breaks <- seq(range[1], range[2], length.out = num)
+
+    ## Convert coordinates into same units as page
+    page_coords <- convert_page(object = apa_plot)
+
+    ## Make viewport
+    vp <- viewport(x = page_coords$x, y = page_coords$y,
+                   height = page_coords$height, width = page_coords$width,
+                   clip = "on", just = apa_plot$just,
+                   name = vp_name)
   }
 
-  cols <- col(length(breaks) + 1)
-  colvec <- as.character(cut(vec, c(-Inf, breaks, Inf), labels = cols))
-  return(colvec)
 
+  ## Handle graphical objects ------------------------------------------------------------
 
-}
+  ## Initialize gTree for grobs
+  assign("apa_grobs", gTree(vp = vp), envir = bbEnv)
 
+  ## Make grobs
+  apaRaster <- rasterGrob(image = m, interpolate = F)
 
+  ## Assign grobs to gTree
+  assign(x = "apa_grobs",
+         value = addGrob(gTree = get("apa_grobs", envir = bbEnv), child = apaRaster),
+         envir = bbEnv)
 
+  ## Add grobs to object
+  apa_plot$grobs <- get("apa_grobs", envir = bbEnv)
 
+  ## Plot grobs
+  if (apa_plot$draw) {
+    grid.draw(apa_plot$grobs)
+  }
 
-
-## Begin function ------------------------------------------------------------------------
-
-## Accept multiple types of input and convert to matrix
-if (class(apa) == "list") {
-
-  ## Check for errors with list format
-  check_apa_list(apa)
-
-  ## Convert apa matrix list to a single apa matrix
-  apa <- Reduce("+", apa)
-
-
-} else if ("data.frame" %in% class(apa)) {
-
-  ## Check for errors with data.frame format
-  check_apa_dataFrame(apa)
-
-  ## Rename columns & cast into wide format matrix
-  colnames(apa) <- c("var1", "var2", "value")
-  apa <- reshape2::acast(apa, var1 ~ var2)
-
-} else if (class(apa) != "matrix") {
-
-  ## Stop for anything that is not a matrix
-  stop(sprintf("class %s is not supported.", class(apa)))
+  ## Return object
+  return(apa_plot)
 
 }
-
-## Check for matrix errors
-check_apa_matrix(apa)
-
-
-## Map apa matrix values to color palette
-colv <- maptocolors(vec = as.vector(apa), col = palette, range = range)
-
-## Format color vector back to apa matrix
-m <- matrix(data = colv, nrow = nrow(apa), ncol = ncol(apa))
-
-## Create viewport
-grid::grid.newpage()
-
-## Visualize apa
-grid::grid.raster(image = m, interpolate = F)
-
-
-
-# remotes::install_github(repo = "EricSDavis/Nori", ref = "Fork-Nori", force = T)
-
-
-
