@@ -1,5 +1,17 @@
+#' Calculates all potential paired interactions from a BED file
+#'
+#' @param bed data.frame in narrowpeak format
+#' @param res bin resolution for output BEDPE
+#' @param x integer top x numer of strongest or weakest peaks
+#' @param decreasing logical order by decreasing
+#' @param interactions string filter for interchromosomal or intrachromosomal interactions
+#'
+#' @return Returns a data.table of BEDPE interactions
+#'
+#' @export
+#'
 ## Define function to make BEDPE from BED ##
-bb_calcBedpe <- function(bed, res = 10000, x = 100, decreasing = T,
+bb_calcBedpe <- function(bed, res = 10000, x = 100, decreasing = TRUE,
                       interactions = "interchromosomal") {
 
   ## Format bed if it is a granges object
